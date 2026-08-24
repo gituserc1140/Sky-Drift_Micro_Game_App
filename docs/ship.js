@@ -4,12 +4,13 @@ export class Ship {
     this.y = y;
     this.size = size;
     this.velocityX = 0;
+    this.velocityY = 0;
     this.boostTimer = 0;
     this.boostCooldown = 0;
   }
 
-  // Main movement system: steer from tilt/keyboard and constrain inside the play field.
-  update(dt, steer, width, height) {
+  // Main movement system: steer from tilt/keyboard/touch and constrain inside the play field.
+  update(dt, steer, steerY, width, height) {
     const acceleration = 900;
     const drag = 0.9;
 
@@ -17,12 +18,17 @@ export class Ship {
     this.velocityX *= drag;
     this.x += this.velocityX * dt;
 
+    this.velocityY += steerY * acceleration * dt;
+    this.velocityY *= drag;
+    this.y += this.velocityY * dt;
+
     const leftBound = this.size;
     const rightBound = width - this.size;
     this.x = Math.max(leftBound, Math.min(rightBound, this.x));
 
-    const yTarget = Math.max(this.size, Math.min(height - this.size, this.y));
-    this.y += (yTarget - this.y) * 0.2;
+    const topBound = this.size;
+    const bottomBound = height - this.size;
+    this.y = Math.max(topBound, Math.min(bottomBound, this.y));
 
     if (this.boostTimer > 0) {
       this.boostTimer = Math.max(0, this.boostTimer - dt);
