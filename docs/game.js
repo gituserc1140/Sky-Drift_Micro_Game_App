@@ -43,14 +43,14 @@ function clamp(value, min, max) {
 }
 
 function normalizeDirectionKey(key) {
+  if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(key)) {
+    return key;
+  }
   const lower = key.toLowerCase();
   if (lower === "a") return "ArrowLeft";
   if (lower === "d") return "ArrowRight";
   if (lower === "w") return "ArrowUp";
   if (lower === "s") return "ArrowDown";
-  if (["arrowleft", "arrowright", "arrowup", "arrowdown"].includes(lower)) {
-    return `Arrow${lower.slice(5, 6).toUpperCase()}${lower.slice(6)}`;
-  }
   return null;
 }
 
