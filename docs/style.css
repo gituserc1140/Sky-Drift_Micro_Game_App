@@ -1,0 +1,92 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #1d4ed8, #020617 65%);
+  color: #f8fafc;
+  display: grid;
+  place-items: center;
+  padding: 8px;
+}
+
+.app-shell {
+  width: min(960px, 100%);
+  display: grid;
+  gap: 10px;
+}
+
+.hud {
+  background: rgba(2, 6, 23, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+}
+
+.hud-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.controls {
+  margin-top: 8px;
+}
+
+button {
+  border: 1px solid #38bdf8;
+  background: #082f49;
+  color: #f8fafc;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.play-area {
+  margin: 0 auto;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  overflow: hidden;
+  background: #0f172a;
+}
+
+#gameCanvas {
+  display: block;
+}
+
+.help-text {
+  margin: 0;
+  font-size: 0.9rem;
+  text-align: center;
+  color: #dbeafe;
+}
+
+@media (max-width: 640px) {
+  .hud-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  button {
+    width: 100%;
+  }
+}

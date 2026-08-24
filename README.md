@@ -1,30 +1,47 @@
-# Gaming Micro App Template
+# Sky Drift
 
-Blank starter template for building browser-based gaming microapps and deploying them to GitHub Pages.
+Sky Drift is a mobile-friendly browser game where you steer a ship through the sky, dodge hazards, and collect glowing orbs for points.
 
-## What this template includes
+## Controls
 
-- `docs/index.html` — starter HTML shell
-- `docs/styles.css` — base responsive styling
-- `docs/game.js` — minimal JavaScript bootstrap point
-- `index.html` — root redirect to `docs/` for local/open-in-browser convenience
+- **Tilt phone left/right:** steer the ship
+- **Tap game area:** trigger a short boost burst
+- **Desktop fallback:** use **Left/Right Arrow** keys to steer
+- **Pause/Resume:** tap the pause button (or press **P** on desktop)
 
-## Create a new game from this template
+## Gameplay
 
-1. Click **Use this template** on GitHub.
-2. Name your new repository.
-3. Clone the new repo and replace `docs/game.js` with your game logic.
-4. Update `docs/index.html` markup and `docs/styles.css` styling as needed.
+- The ship flies forward continuously.
+- Obstacles (clouds, rocks, birds) move toward the player.
+- Collectible orbs increase your score.
+- Speed and obstacle pressure increase over time.
+- Any obstacle collision ends the run and shows your final score.
 
-## Deploy to GitHub Pages
+## File structure
 
-1. In your game repo, go to **Settings → Pages**.
-2. Under **Build and deployment**, choose:
+```text
+/docs
+  index.html
+  style.css
+  game.js
+  ship.js
+  obstacles.js
+  collectibles.js
+```
+
+## Run locally
+
+Open the repository root `index.html` in a browser. It redirects to `/docs/`.
+
+## Deploy with GitHub Pages
+
+1. Go to **Settings → Pages** in your repository.
+2. Under **Build and deployment** choose:
    - **Source:** Deploy from a branch
    - **Branch:** `main` (or your default branch)
    - **Folder:** `/docs`
-3. Save and wait for GitHub Pages to publish.
+3. Save and wait for deployment.
 
-After publish, your app is available at:
+Your game will be available at:
 
-`https://<your-username>.github.io/<your-repo>/`
+`https://<your-username>.github.io/Sky-Drift_Micro_Game_App/`
