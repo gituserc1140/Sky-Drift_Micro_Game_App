@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gaming Micro App Template</title>
+    <script>
+      const target = new URL("./docs/", window.location.href);
+      target.search = window.location.search;
+      target.hash = window.location.hash;
+      window.location.replace(target);
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <p><a href="./docs/">Open app template</a></p>
+    </noscript>
+  </body>
+</html>
