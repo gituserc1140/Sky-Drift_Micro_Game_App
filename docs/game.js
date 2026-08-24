@@ -18,7 +18,8 @@ let obstacles;
 let collectibles;
 
 let score = 0;
-let baseSpeed = 240;
+const BASE_SPEED = 240;
+let baseSpeed = BASE_SPEED;
 let speed = baseSpeed;
 let difficulty = 0;
 let lastTime = 0;
@@ -71,7 +72,7 @@ function resetRound() {
   obstacles = new ObstacleField();
   collectibles = new CollectibleField();
   score = 0;
-  baseSpeed = 240;
+  baseSpeed = BASE_SPEED;
   speed = baseSpeed;
   difficulty = 0;
   finalScore = 0;
@@ -80,7 +81,7 @@ function resetRound() {
 
 function updateHud() {
   scoreLabel.textContent = `Score: ${Math.floor(score)}`;
-  speedLabel.textContent = `Speed: ${(speed / 240).toFixed(1)}x`;
+  speedLabel.textContent = `Speed: ${(speed / BASE_SPEED).toFixed(1)}x`;
 }
 
 function startGame() {
@@ -228,9 +229,11 @@ function drawSky() {
 // Render pass: world, HUD text, and state overlays (title/pause/game over).
 function draw() {
   drawSky();
-  collectibles.draw(ctx);
-  obstacles.draw(ctx);
-  ship.draw(ctx);
+  if (ship && obstacles && collectibles) {
+    collectibles.draw(ctx);
+    obstacles.draw(ctx);
+    ship.draw(ctx);
+  }
 
   if (state === "title") {
     drawOverlay("Sky Drift", "Tap the canvas or press Start to fly");
@@ -278,4 +281,9 @@ applyResize();
 resetRound();
 requestTiltPermissionIfNeeded();
 window.addEventListener("resize", applyResize);
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    lastTime = 0;
+  }
+});
 requestAnimationFrame(loop);
