@@ -59,7 +59,7 @@ function applyResize() {
   const maxWidth = Math.min(window.innerWidth - 16, 960);
   const canvasWidth = Math.max(300, maxWidth);
   const canvasHeight = Math.round(canvasWidth * 0.6);
-  const maxHeight = Math.min(window.innerHeight - 220, 650);
+  const maxHeight = Math.max(260, Math.min(window.innerHeight - 220, 650));
   const ratio = Math.min(1, maxHeight / canvasHeight);
   const cssWidth = Math.round(canvasWidth * ratio);
   const cssHeight = Math.round(canvasHeight * ratio);
@@ -199,6 +199,9 @@ let dragStart = null;
 
 canvas.addEventListener("pointerdown", (e) => {
   touchedOnce = true;
+  if (canvas.setPointerCapture) {
+    canvas.setPointerCapture(e.pointerId);
+  }
   if (state === "title") {
     startGame();
     dragStart = { x: e.clientX, y: e.clientY };
@@ -219,7 +222,6 @@ canvas.addEventListener("pointermove", (e) => {
   input.touchSteer = Math.abs(dx) > deadzone ? clamp(dx / scale, -1, 1) : 0;
   input.touchSteerY = Math.abs(dy) > deadzone ? clamp(dy / scale, -1, 1) : 0;
   input.hasTouch = true;
-  dragStart = { x: e.clientX, y: e.clientY };
 });
 
 canvas.addEventListener("pointerup", () => {
@@ -340,7 +342,10 @@ resetRound();
 requestTiltPermissionIfNeeded();
 window.addEventListener("resize", applyResize);
 document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) {
+  if (document.hidden && state === "running") {
+    state = "paused";
+    pauseBtn.textContent = "Resume";
+  } else if (!document.hidden && (state === "running" || state === "paused")) {
     lastTime = 0;
   }
 });
