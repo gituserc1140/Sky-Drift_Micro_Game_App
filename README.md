@@ -6,7 +6,7 @@ Sky Drift is a mobile-friendly browser game where you steer a ship through the s
 
 - **Tilt phone left/right:** steer the ship
 - **Tap game area:** trigger a short boost burst
-- **Desktop fallback:** use **Left/Right Arrow** keys to steer
+- **Desktop fallback:** use **Arrow keys** or **WASD** to steer
 - **Pause/Resume:** tap the pause button (or press **P** on desktop)
 
 ## Gameplay

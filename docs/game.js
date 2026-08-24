@@ -42,6 +42,18 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
+function normalizeDirectionKey(key) {
+  const lower = key.toLowerCase();
+  if (lower === "a") return "ArrowLeft";
+  if (lower === "d") return "ArrowRight";
+  if (lower === "w") return "ArrowUp";
+  if (lower === "s") return "ArrowDown";
+  if (["arrowleft", "arrowright", "arrowup", "arrowdown"].includes(lower)) {
+    return `Arrow${lower.slice(5, 6).toUpperCase()}${lower.slice(6)}`;
+  }
+  return null;
+}
+
 function applyResize() {
   const playArea = canvas.parentElement;
   const maxWidth = Math.min(window.innerWidth - 16, 960);
@@ -157,8 +169,9 @@ window.addEventListener("deviceorientation", (event) => {
 });
 
 window.addEventListener("keydown", (event) => {
-  if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
-    keys[event.key] = true;
+  const directionKey = normalizeDirectionKey(event.key);
+  if (directionKey) {
+    keys[directionKey] = true;
     updateKeyboardSteer();
     event.preventDefault();
   }
@@ -175,8 +188,9 @@ window.addEventListener("keydown", (event) => {
 });
 
 window.addEventListener("keyup", (event) => {
-  if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
-    keys[event.key] = false;
+  const directionKey = normalizeDirectionKey(event.key);
+  if (directionKey) {
+    keys[directionKey] = false;
     updateKeyboardSteer();
   }
 });
