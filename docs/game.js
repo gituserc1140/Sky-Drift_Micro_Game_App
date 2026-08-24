@@ -27,11 +27,15 @@ let state = "title";
 let finalScore = 0;
 let touchedOnce = false;
 
-const keys = { ArrowLeft: false, ArrowRight: false };
+const keys = { ArrowLeft: false, ArrowRight: false, ArrowUp: false, ArrowDown: false };
 const input = {
   tiltSteer: 0,
   keyboardSteer: 0,
+  keyboardSteerY: 0,
   hasTilt: false,
+  touchSteer: 0,
+  touchSteerY: 0,
+  hasTouch: false,
 };
 
 function clamp(value, min, max) {
@@ -95,12 +99,16 @@ function endGame() {
   state = "gameover";
 }
 
-// Input system: tilt if available, fallback to keyboard arrows.
+// Input system: touch drag > tilt if available, fallback to keyboard arrows.
 function currentSteer() {
-  if (input.hasTilt) {
-    return input.tiltSteer;
-  }
+  if (input.hasTouch) return input.touchSteer;
+  if (input.hasTilt) return input.tiltSteer;
   return input.keyboardSteer;
+}
+
+function currentSteerY() {
+  if (input.hasTouch) return input.touchSteerY;
+  return input.keyboardSteerY;
 }
 
 function updateKeyboardSteer() {
@@ -110,6 +118,14 @@ function updateKeyboardSteer() {
     input.keyboardSteer = 1;
   } else {
     input.keyboardSteer = 0;
+  }
+
+  if (keys.ArrowUp && !keys.ArrowDown) {
+    input.keyboardSteerY = -1;
+  } else if (keys.ArrowDown && !keys.ArrowUp) {
+    input.keyboardSteerY = 1;
+  } else {
+    input.keyboardSteerY = 0;
   }
 }
 
@@ -141,9 +157,10 @@ window.addEventListener("deviceorientation", (event) => {
 });
 
 window.addEventListener("keydown", (event) => {
-  if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+  if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
     keys[event.key] = true;
     updateKeyboardSteer();
+    event.preventDefault();
   }
 
   if (event.key.toLowerCase() === "p" && state !== "title") {
@@ -158,25 +175,51 @@ window.addEventListener("keydown", (event) => {
 });
 
 window.addEventListener("keyup", (event) => {
-  if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+  if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
     keys[event.key] = false;
     updateKeyboardSteer();
   }
 });
 
-function triggerBoostFromTap() {
+let dragStart = null;
+
+canvas.addEventListener("pointerdown", (e) => {
+  touchedOnce = true;
   if (state === "title") {
     startGame();
+    dragStart = { x: e.clientX, y: e.clientY };
     return;
   }
+  dragStart = { x: e.clientX, y: e.clientY };
   if (state === "running") {
     ship.triggerBoost();
   }
-}
+});
 
-canvas.addEventListener("pointerdown", () => {
-  touchedOnce = true;
-  triggerBoostFromTap();
+canvas.addEventListener("pointermove", (e) => {
+  if (dragStart === null || state !== "running") return;
+  const dx = e.clientX - dragStart.x;
+  const dy = e.clientY - dragStart.y;
+  const deadzone = 4;
+  const scale = 60;
+  input.touchSteer = Math.abs(dx) > deadzone ? clamp(dx / scale, -1, 1) : 0;
+  input.touchSteerY = Math.abs(dy) > deadzone ? clamp(dy / scale, -1, 1) : 0;
+  input.hasTouch = true;
+  dragStart = { x: e.clientX, y: e.clientY };
+});
+
+canvas.addEventListener("pointerup", () => {
+  dragStart = null;
+  input.touchSteer = 0;
+  input.touchSteerY = 0;
+  input.hasTouch = false;
+});
+
+canvas.addEventListener("pointercancel", () => {
+  dragStart = null;
+  input.touchSteer = 0;
+  input.touchSteerY = 0;
+  input.hasTouch = false;
 });
 
 startBtn.addEventListener("click", startGame);
@@ -197,7 +240,7 @@ function tick(dt) {
   baseSpeed += dt * 8;
   speed = baseSpeed * ship.boostMultiplier();
 
-  ship.update(dt, currentSteer(), width, height);
+  ship.update(dt, currentSteer(), currentSteerY(), width, height);
   obstacles.update(dt, speed, difficulty, width, height);
   collectibles.update(dt, speed, difficulty, width, height);
 
@@ -246,10 +289,10 @@ function draw() {
 
   if (!touchedOnce && state !== "title") {
     ctx.fillStyle = "rgba(15,23,42,0.7)";
-    ctx.fillRect(12, height - 54, 260, 38);
+    ctx.fillRect(12, height - 54, 300, 38);
     ctx.fillStyle = "#e2e8f0";
     ctx.font = "14px Arial, sans-serif";
-    ctx.fillText("Tap anywhere on the play area to boost", 24, height - 30);
+    ctx.fillText("Drag to steer · Tap to boost", 24, height - 30);
   }
 }
 

@@ -71,6 +71,7 @@ button:active {
 
 #gameCanvas {
   display: block;
+  touch-action: none;
 }
 
 .help-text {
