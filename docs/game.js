@@ -219,8 +219,9 @@ function drawSky() {
   ctx.fillRect(0, 0, width, height);
 
   ctx.fillStyle = "rgba(255,255,255,0.18)";
+  const now = performance.now();
   for (let i = 0; i < 18; i += 1) {
-    const x = ((i * 137 + performance.now() * (0.01 + i * 0.001)) % (width + 200)) - 100;
+    const x = ((i * 137 + now * (0.01 + i * 0.001)) % (width + 200)) - 100;
     const y = (i * 53) % height;
     ctx.fillRect(x, y, 42, 2);
   }
@@ -265,7 +266,7 @@ function drawOverlay(title, subtitle) {
 }
 
 function loop(timestamp) {
-  if (!lastTime) lastTime = timestamp;
+  if (lastTime === 0) lastTime = timestamp;
   const dt = Math.min(0.032, (timestamp - lastTime) / 1000);
   lastTime = timestamp;
 
