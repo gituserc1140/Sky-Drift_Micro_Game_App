@@ -345,7 +345,7 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden && state === "running") {
     state = "paused";
     pauseBtn.textContent = "Resume";
-  } else if (!document.hidden) {
+  } else if (!document.hidden && (state === "running" || state === "paused")) {
     lastTime = 0;
   }
 });
