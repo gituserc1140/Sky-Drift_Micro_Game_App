@@ -2,6 +2,8 @@
 
 Sky Drift is a mobile-friendly browser game where you steer a ship through the sky, dodge hazards, and collect glowing orbs for points.
 
+[![Play on GitHub Pages](https://img.shields.io/badge/Play%20on-GitHub%20Pages-222222?logo=githubpages&logoColor=white&style=flat-square)](https://gituserc1140.github.io/Sky-Drift_Micro_Game_App/docs/)
+
 # Sponsor me!
 
 [![Sponsor me on GitHub](https://img.shields.io/badge/Sponsor%20me%20on-GitHub-EA4AAA?logo=githubsponsors&style=flat-square)](https://github.com/sponsors/gituserc1140)
